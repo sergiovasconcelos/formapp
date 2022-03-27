@@ -1,77 +1,59 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Alert } from 'react-native';
 import { Button } from '../Button';
-import { Input } from '../Input';
+import { ControlledInput } from '../ControlledInput';
 import { Container } from './styles';
+import { useForm } from 'react-hook-form';
 
-const VALID_EMAIL_EXPRESSION = /(?!.*\.{2})^([a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+(\.[a-z\d!#$%&'*+\-\/=?^_`{|}~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]+)*|"((([\t]*\r\n)?[\t]+)?([\x01-\x08\x0b\x0c\x0e-\x1f\x7f\x21\x23-\x5b\x5d-\x7e\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|\\[\x01-\x09\x0b\x0c\x0d-\x7f\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))*(([\t]*\r\n)?[\t]+)?")@(([a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\d\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.)+([a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]|[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF][a-z\d\-._~\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]*[a-z\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])\.?$/i;
+type FormData = {
+  name: string;
+  email: string;
+  password: string;
+  password_confirm: string;
+}
 
 export function Form() {
 
-const [name, setName] = useState("");
-const [email, setEmail] = useState("");
-const [password, setPassword] = useState("");
-const [passwordConfirm, setPasswordConfirm] = useState("");
+const { control, handleSubmit } = useForm<FormData>();
 
-  function handleUserRegister() {
-    //Jeito tradicional
-   /* if(name.trim() === ""){
-      return Alert.alert("Informe seu nome.");
-    }
-    if(email.trim() === ""){
-      return Alert.alert("Informe um e-mail");
-    }
-    if(!(VALID_EMAIL_EXPRESSION).test(email)){
-      return Alert.alert("E-mail inválido!");
-    }
-    if(password.trim() === ""){
-      return Alert.alert("Informe uma senha!");
-    }
-    if(password.trim().length < 6){
-      return Alert.alert("Sua senha tem que ser maior que 6 dígitos!");
-    }
-    if(password.trim() !== passwordConfirm.trim()){
-      return Alert.alert("A senha não confere!");
-    }
-    Alert.alert("Cadastrado com sucesso!");*/
-    //Para formulário grandes e/ou complexos
-    
+  function handleUserRegister(data: FormData) {
+    console.log(data);    
   }
 
   return (
     <Container>
-      <Input
+      <ControlledInput
+        name="name"
+        control={control}
         icon="user"
-        placeholder="Nome"
-        onChangeText={setName}
-        value={name}
+        placeholder="Nome"        
       />
-      <Input
+      <ControlledInput
+        name="email"
+        control={control}
         icon="mail"
         placeholder="E-mail"
         keyboardType="email-address"
-        autoCapitalize='none'
-        onChangeText={setEmail}
-        value={email}
+        autoCapitalize='none'        
       />
-      <Input
+      <ControlledInput
+        name="password"
+        control={control}
         icon="lock"
         placeholder="Senha"
-        secureTextEntry
-        onChangeText={setPassword}
-        value={password}
+        secureTextEntry        
       />
-      <Input
+      <ControlledInput
+        name="password_confirm"
+        control={control}
         icon="lock"
         placeholder="Confirme a senha"
-        secureTextEntry
-        onChangeText={setPasswordConfirm}
-        value={passwordConfirm}
+        secureTextEntry        
       />
 
       <Button
         title="Cadastrar"
-        onPress={handleUserRegister}
+        onPress={handleSubmit(handleUserRegister)}
       />
     </Container>
   )
